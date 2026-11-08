@@ -337,7 +337,7 @@ public class SettingsActivity extends Activity {
                 c.applyTheme(v);
             }
         }, false);
-        spin("تصویر صفحه ساعت (آنالوگ)", new String[]{"بدون تصویر (فقط طیف رنگی)", "تصویر ۱", "تصویر ۲", "تصویر ۳", "تصویر ۴", "تصویر ۵"}, c.face, new IntSet() {
+        spin("مدل صفحه ساعت (آنالوگ)", new String[]{"پیش‌فرض (طیف رنگی)", "مدل ۱: مشکی و آبی", "مدل ۲: شبکه‌ای سفید", "مدل ۳: مرمری و طلایی", "مدل ۴: ورزشی نئونی", "مدل ۵: گل بنفش"}, c.face, new IntSet() {
             public void set(int v) {
                 c.face = v;
             }

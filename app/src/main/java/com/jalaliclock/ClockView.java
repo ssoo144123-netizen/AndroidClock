@@ -4,13 +4,9 @@ import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.BatteryManager;
@@ -38,8 +34,6 @@ public class ClockView extends View {
     private int fg, bg, accent;
     private long colorSlot = -1;
     private int lastPal = -1;
-    private Bitmap faceBmp;
-    private int faceBmpId = -1;
 
     private final Runnable tick = new Runnable() {
         public void run() {
@@ -266,7 +260,8 @@ public class ClockView extends View {
         float y = cy - total / 2f;
 
         if (analog) {
-            drawDial(cv, cx, y + D / 2f, D / 2f, H, M, S, c.style == 2 ? timeTxt : null);
+            if (c.face > 0) Faces.draw(cv, p, cx, y + D / 2f, D / 2f, H, M, S, c.face);
+            else drawDial(cv, cx, y + D / 2f, D / 2f, H, M, S, c.style == 2 ? timeTxt : null);
             y += D + gap;
         }
         if (digitalOnly) {
@@ -352,7 +347,6 @@ public class ClockView extends View {
     }
 
     private void drawDial(Canvas cv, float cx, float cy, float r, int H, int M, int S, String inText) {
-        if (c.face > 0) drawFace(cv, cx, cy, r);
         float thick = Math.max(4f, r * 0.07f), edge = r - 2;
         double sec = S, min = M + sec / 60.0, hr = (H % 12) + min / 60.0;
 
