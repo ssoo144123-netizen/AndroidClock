@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 public class Cfg {
     public int style = 2;          // 0 دیجیتال، 1 آنالوگ، 2 آنالوگ + دیجیتال داخل صفحه
     public int theme = 0, size = 100, dim = 25, aodMin = 0;
+    /** تصویر صفحه ساعت: 0 = بدون تصویر (طیف رنگی)، 1..5 = face_1..face_5 */
+    public int face = 0;
     public int fg = 0xFFFFFFFF, bg = 0xFF000000, accent = 0xFF00D2FF;
     public boolean arc = true, rainbow = false, seconds = true, date = true, weekday = true,
             h24 = true, fa = true, alarm = true, battery = true, burn = true, watch = false;
@@ -63,6 +65,7 @@ public class Cfg {
         Cfg c = new Cfg();
         c.style = p.getInt("style", c.style);
         c.theme = Math.max(0, Math.min(PAL.length - 1, p.getInt("theme", c.theme)));
+        c.face = Math.max(0, Math.min(5, p.getInt("face", c.face)));
         c.size = p.getInt("size", c.size);
         c.dim = p.getInt("dim", c.dim);
         c.aodMin = p.getInt("aodMin", c.aodMin);
@@ -105,7 +108,7 @@ public class Cfg {
 
     public void save(Context ctx) {
         ctx.getSharedPreferences("cfg", Context.MODE_PRIVATE).edit()
-                .putInt("style", style).putInt("theme", theme).putInt("size", size).putInt("dim", dim)
+                .putInt("style", style).putInt("theme", theme).putInt("face", face).putInt("size", size).putInt("dim", dim)
                 .putInt("aodMin", aodMin).putInt("fg", fg).putInt("bg", bg).putInt("accent", accent)
                 .putBoolean("arc", arc).putBoolean("rainbow", rainbow).putBoolean("seconds", seconds)
                 .putBoolean("date", date).putBoolean("weekday", weekday).putBoolean("h24", h24)

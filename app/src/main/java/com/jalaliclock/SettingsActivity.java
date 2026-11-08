@@ -337,6 +337,11 @@ public class SettingsActivity extends Activity {
                 c.applyTheme(v);
             }
         }, false);
+        spin("تصویر صفحه ساعت (آنالوگ)", new String[]{"بدون تصویر (فقط طیف رنگی)", "تصویر ۱", "تصویر ۲", "تصویر ۳", "تصویر ۴", "تصویر ۵"}, c.face, new IntSet() {
+            public void set(int v) {
+                c.face = v;
+            }
+        }, false);
         check("کمان رنگی دور ساعت آنالوگ (ثانیه و دقیقه)", c.arc, new BoolSet() {
             public void set(boolean v) {
                 c.arc = v;

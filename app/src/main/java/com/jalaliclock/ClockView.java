@@ -4,9 +4,13 @@ import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.BatteryManager;
@@ -34,6 +38,8 @@ public class ClockView extends View {
     private int fg, bg, accent;
     private long colorSlot = -1;
     private int lastPal = -1;
+    private Bitmap faceBmp;
+    private int faceBmpId = -1;
 
     private final Runnable tick = new Runnable() {
         public void run() {
@@ -327,7 +333,26 @@ public class ClockView extends View {
         cv.drawLine(cx - sn * tail, cy + cs * tail, cx + sn * len, cy - cs * len, p);
     }
 
+    private void drawFace(Canvas cv, float cx, float cy, float r) {
+        if (faceBmp == null || faceBmpId != c.face) {
+            int[] ids = {R.drawable.face_1, R.drawable.face_2, R.drawable.face_3, R.drawable.face_4, R.drawable.face_5};
+            faceBmp = BitmapFactory.decodeResource(getResources(), ids[c.face - 1]);
+            faceBmpId = c.face;
+        }
+        if (faceBmp == null) return;
+        int bw = faceBmp.getWidth(), bh = faceBmp.getHeight(), s = Math.min(bw, bh);
+        Rect src = new Rect((bw - s) / 2, (bh - s) / 2, (bw + s) / 2, (bh + s) / 2);
+        Path clip = new Path();
+        clip.addCircle(cx, cy, r, Path.Direction.CW);
+        cv.save();
+        cv.clipPath(clip);
+        Paint bp = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+        cv.drawBitmap(faceBmp, src, new RectF(cx - r, cy - r, cx + r, cy + r), bp);
+        cv.restore();
+    }
+
     private void drawDial(Canvas cv, float cx, float cy, float r, int H, int M, int S, String inText) {
+        if (c.face > 0) drawFace(cv, cx, cy, r);
         float thick = Math.max(4f, r * 0.07f), edge = r - 2;
         double sec = S, min = M + sec / 60.0, hr = (H % 12) + min / 60.0;
 
